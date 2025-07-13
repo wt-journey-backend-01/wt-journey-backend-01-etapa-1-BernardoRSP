@@ -3,17 +3,15 @@ const path = require("path");
 const fs = require("fs");
 
 const app = express();
-const PORT = 4000;
+const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-// Rota Raiz - Página inicial com formulário
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
-// Rota /sugestao - via query string
 app.get("/sugestao", (req, res) => {
   const { nome, ingredientes } = req.query;
 
@@ -24,12 +22,10 @@ app.get("/sugestao", (req, res) => {
   `);
 });
 
-// Rota GET /contato - página de contato
 app.get("/contato", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "contato.html"));
 });
 
-// Rota POST /contato - envio do formulário
 app.post("/contato", (req, res) => {
   const { nome, email, assunto, mensagem } = req.body;
 
@@ -43,14 +39,12 @@ app.post("/contato", (req, res) => {
   `);
 });
 
-// Rota /api/lanches - retorna JSON
 app.get("/api/lanches", (req, res) => {
   const lanchesPath = path.join(__dirname, "public", "data", "lanches.json");
   const lanches = JSON.parse(fs.readFileSync(lanchesPath, "utf-8"));
   res.json(lanches);
 });
 
-// Rota 404
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
 });
